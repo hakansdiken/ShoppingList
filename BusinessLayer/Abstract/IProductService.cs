@@ -16,5 +16,6 @@ namespace BusinessLayer.Abstract
         Product GetById(int id);
         List<Product> GetProductsWithCategoryName(string categoryName);
         List<Product> GetProductsBySearch(string stringForSearch);
+        void UpdateProductState(int[] productIds, int shopListId);
     }
 }

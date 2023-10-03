@@ -14,42 +14,65 @@
             </h2>
             <div id="list_@(list.ShopListId)" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
-                    <div>
-                        <a class="btn btn-outline-success btn-sm" asp-action="ListProduct" asp-route-listId="@list.ShopListId">Ürün Ekle</a>
-                        <a class="btn btn-outline-danger btn-sm" asp-action="DeleteShopList" asp-route-listId="@list.ShopListId">Listeyi Sil</a>
-                        @if (list.State)
-                        {
-                            <a class="btn btn-outline-primary btn-sm" asp-action="UpdateShopListState" asp-route-listId="@list.ShopListId">Alışverişe Çık</a>
+                    <form method="post" asp-action="UpdateProductState" asp-route-ShopListId="@list.ShopListId">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <a class="btn btn-outline-success btn-sm" asp-action="ListProduct" asp-route-listId="@list.ShopListId">Ürün Ekle</a>
+                                <a class="btn btn-outline-danger btn-sm" asp-action="DeleteShopList" asp-route-listId="@list.ShopListId">Listeyi Sil</a>
+                            </div>
+                            <div>
+                                @if (list.Products.Count > 0)
+                                {
 
-                        }
-                        else
-                        {
-                            <a class="btn btn-outline-danger btn-sm" asp-action="UpdateShopListState" asp-route-listId="@list.ShopListId">Alışverişi Bitir</a>
-                        }
-                    </div>
-                    <table class="table table-responsive">
-                        <thead>
-                            <tr>
-                                <th>Ürün Adı</th>
-                                <th>Ürün Resmi</th>
-                                <th>Ürün Detay</th>
-                                <th>Ürünü Kaldır</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in list.Products)
-                            {
+                                    @if (list.State)
+                                    {
+                                        <a class="btn btn-outline-primary btn-sm" asp-action="UpdateShopListState" asp-route-listId="@list.ShopListId">Alışverişe Çık</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-outline-primary btn-sm" asp-action="UpdateShopListState" asp-route-listId="@list.ShopListId">Alışverişi Bitir</a>
+                                        <button type="submit" class="btn btn-outline-primary btn-sm">Aldım</button>
+                                    }
+                                }
+                            </div>
+                        </div>
+                        <table class="table table-responsive">
+                            <thead>
+                                @if (list.Products.Count != 0)
+                                {
+                                    <tr>
+                                        @if (!list.State)
+                                        {
+                                            <th>Alındı</th>
+                                        }
+                                        <th>Ürün Adı</th>
+                                        <th>Ürün Resmi</th>
+                                        <th>Ürün Detay</th>
+                                        <th>Ürünü Kaldır</th>
+                                    </tr>
+                                }
+                            </thead>
+                            <tbody>
+                                @foreach (var item in list.Products)
+                                {
+                                    <tr class="align-middle">
+                                        @if (!list.State)
+                                        {
+                                            <td class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" name="ProductIds" value="@item.ProductId"
+                                                @(item.IsBought == true ? "checked" : "") />
+                                            </td>
+                                        }
+                                        <td>@item.Product.ProductName</td>
+                                        <td><img src="~/images/@item.Product.ProductImage" width="80px;" height="80px;" style="object-fit: scale-down;" /></td>
+                                        <td><a class="btn btn-primary btn-sm" asp-action="ProductDetail" asp-route-listId="@list.ShopListId" asp-route-productId="@item.ProductId">Ürün Detay</a></td>
+                                        <td><a class="btn btn-danger btn-sm" asp-action="RemoveProductFromList" asp-route-listId="@list.ShopListId" asp-route-productId="@item.ProductId">Ürünü Kaldır</a></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </form>
 
-                                <tr class="align-middle">
-                                    <td>@item.Product.ProductName</td>
-                                    <td><img src="~/images/@item.Product.ProductImage" width="80px;" height="80px;" style="object-fit: scale-down;" /></td>
-                                    <td><a class="btn btn-primary btn-sm" asp-action="ProductDetail" asp-route-listId="@list.ShopListId" asp-route-productId="@item.ProductId">Ürün Detay</a></td>
-                                    <td><a class="btn btn-danger btn-sm" asp-action="RemoveProductFromList" asp-route-listId="@list.ShopListId" asp-route-productId="@item.ProductId">Ürünü Kaldır</a></td>
-                                </tr>
-                            }
-                        </tbody>
-
-                    </table>
                 </div>
             </div>
         </div>

@@ -37,7 +37,6 @@ namespace DataAccessLibrary.Concrete
                 return true;
             }
         }
-
         public string GetProductNote(int productId, int listId)
         {
             using (var db = new Context())

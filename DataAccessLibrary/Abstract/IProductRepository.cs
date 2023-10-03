@@ -11,5 +11,6 @@ namespace DataAccessLibrary.Abstract
     {
         List<Product> GetProductsBySearch(string stringForSearch);
         List<Product> GetProductsWithCategoryName(string categoryName);
+        void UpdateProductState(int[] productIds, int shopListId);
     }
 }

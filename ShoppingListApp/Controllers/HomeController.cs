@@ -67,29 +67,29 @@ namespace ShoppingListApp.Controllers
             }
             var list = _shopListService.GetById(vm.ListId);
             var isAddedBefore = _shopListService.AddProductToList(vm.ProductId, vm.ListId, vm.Note);
+            var msg = new AlertMessage();
 
-            var alertMessage = new AlertMessage();
             if (!list.State)
             {
-                alertMessage.AlertType = "danger";
-                alertMessage.Message = "Alışverişteyken ürün ekleyemezsiniz!";
-                TempData["Message"] = JsonSerializer.Serialize(alertMessage);
+                msg.AlertType = "danger";
+                msg.Message = "Alışverişteyken listenize ürün ekleyemezsiniz!";
+                TempData["Message"] = JsonSerializer.Serialize(msg);
 
             }
             else
             {
                 if (isAddedBefore)
                 {
-                    alertMessage.AlertType = "danger";
-                    alertMessage.Message = "Bu ürün daha önce listenize eklenmiştir.";
+                    msg.AlertType = "danger";
+                    msg.Message = "Bu ürün daha önce listenize eklenmiştir.";
 
                 }
                 else
                 {
-                    alertMessage.AlertType = "success";
-                    alertMessage.Message = "Ürün listenize eklenmiştir.";
+                    msg.AlertType = "success";
+                    msg.Message = "Ürün listenize eklenmiştir.";
                 }
-                TempData["Message"] = JsonSerializer.Serialize(alertMessage);
+                TempData["Message"] = JsonSerializer.Serialize(msg);
             }
 
 
@@ -101,11 +101,12 @@ namespace ShoppingListApp.Controllers
             var (removedProductName, listName) = _shopListService.RemoveProductFromList(productId, listId);
             if (removedProductName != null && listName != null)
             {
-                var alertMessage = new AlertMessage()
+                var msg = new AlertMessage()
                 {
                     AlertType = "success",
                     Message = $"{removedProductName} adlı ürün {listName} listesinden silinmiştir."
                 };
+                TempData["Message"] = JsonSerializer.Serialize(msg);
             }
             return RedirectToAction("Index");
         }
@@ -132,12 +133,12 @@ namespace ShoppingListApp.Controllers
             var isUpdated = _shopListService.UpdateProductNote(vm.ProductId, vm.ListId, vm.Note);
             if (isUpdated)
             {
-                var alertMessage = new AlertMessage()
+                var msg = new AlertMessage()
                 {
                     AlertType = "success",
                     Message = "Ürün notu başarıyla güncellendi"
                 };
-                TempData["Message"] = JsonSerializer.Serialize(alertMessage);
+                TempData["Message"] = JsonSerializer.Serialize(msg);
             }
 
             return Redirect("Index");
@@ -192,14 +193,20 @@ namespace ShoppingListApp.Controllers
             return RedirectToAction("Index");
 
         }
-
         public IActionResult UpdateShopListState(int listId)
         {
+            //_shopListService.
             _shopListService.UpdateShopListState(listId);
-            
+
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        public IActionResult UpdateProductState(ShopListVM vm)
+        {
+            _productService.UpdateProductState(vm.ProductIds, vm.ShopListId);
 
+            return RedirectToAction("Index");
+        }
     }
 
 }

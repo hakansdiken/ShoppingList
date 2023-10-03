@@ -51,5 +51,10 @@ namespace BusinessLayer.Concrete
         {
             productRepository.Update(t);
         }
+
+        public void UpdateProductState(int[] productIds, int shopListId)
+        {
+            productRepository.UpdateProductState(productIds, shopListId);
+        }
     }
 }

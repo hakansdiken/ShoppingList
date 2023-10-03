@@ -5,6 +5,6 @@
         public int ListId { get; set; }
         public int ProductId { get; set; }
         public string? Note { get; set; }
-        public bool State { get; set; }
+        public bool IsBought { get; set; }
     }
 }
