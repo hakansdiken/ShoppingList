@@ -1,0 +1,57 @@
+﻿@model ShopListVM
+<h3 class="text-center">Alışveriş Listelerim</h3>
+<a class="btn btn-success btn-sm mb-2" asp-action="CreateShopList">
+    Liste Oluştur
+</a>
+<div class="accordion">
+    @foreach (var list in Model.ShopLists)
+    {
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#list_@(list.ShopListId)" aria-expanded="true" aria-controls="collapseOne">
+                    <strong>@list.ShopListName</strong>
+                </button>
+            </h2>
+            <div id="list_@(list.ShopListId)" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <div>
+                        <a class="btn btn-outline-success btn-sm" asp-action="ListProduct" asp-route-listId="@list.ShopListId">Ürün Ekle</a>
+                        <a class="btn btn-outline-danger btn-sm" asp-action="DeleteShopList" asp-route-listId="@list.ShopListId">Listeyi Sil</a>
+                        @if (list.State)
+                        {
+                            <a class="btn btn-outline-primary btn-sm" asp-action="UpdateShopListState" asp-route-listId="@list.ShopListId">Alışverişe Çık</a>
+
+                        }
+                        else
+                        {
+                            <a class="btn btn-outline-danger btn-sm" asp-action="UpdateShopListState" asp-route-listId="@list.ShopListId">Alışverişi Bitir</a>
+                        }
+                    </div>
+                    <table class="table table-responsive">
+                        <thead>
+                            <tr>
+                                <th>Ürün Adı</th>
+                                <th>Ürün Resmi</th>
+                                <th>Ürün Detay</th>
+                                <th>Ürünü Kaldır</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in list.Products)
+                            {
+
+                                <tr class="align-middle">
+                                    <td>@item.Product.ProductName</td>
+                                    <td><img src="~/images/@item.Product.ProductImage" width="80px;" height="80px;" style="object-fit: scale-down;" /></td>
+                                    <td><a class="btn btn-primary btn-sm" asp-action="ProductDetail" asp-route-listId="@list.ShopListId" asp-route-productId="@item.ProductId">Ürün Detay</a></td>
+                                    <td><a class="btn btn-danger btn-sm" asp-action="RemoveProductFromList" asp-route-listId="@list.ShopListId" asp-route-productId="@item.ProductId">Ürünü Kaldır</a></td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>

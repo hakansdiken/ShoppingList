@@ -1,0 +1,12 @@
+﻿@model List<Category>
+<div class="card bg-light mt-3 p-2">
+    <h5>Kategoriler</h5>
+    <ul class="list-group">
+        @foreach (var category in Model)
+        {
+            <li class="list-group-item">
+                <a asp-controller="Home" asp-action="ListProduct" asp-route-listId="@ViewBag.SelectedList" asp-route-categoryName="@category.CategoryName.ToLower().Replace(" ","")" class="text-decoration-none">@category.CategoryName</a>
+            </li>
+        }
+    </ul>
+</div>

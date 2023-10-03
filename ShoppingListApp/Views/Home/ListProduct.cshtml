@@ -1,0 +1,57 @@
+﻿@model ProductVM
+<div class="my-4 text-center">
+    <h2>Alışveriş Listem</h2>
+</div>
+<div class="row">
+    <div class="col-md-9">
+        <div class="row">
+            @foreach (var product in Model.Products)
+            {
+                <div class="col-lg-4 mb-3">
+                    <div class="card" style="width: 16rem; border-radius: 1rem;">
+                        <img src="~/images/@product.ProductImage" class="card-img-top mx-auto d-block mt-3" style="width: 8rem;">
+                        <div class="card-body">
+                            <h5 class="card-title text-center">@product.ProductName</h5>
+                            <div class="d-flex justify-content-center">
+                                <a class="btn btn-primary btn-sm " data-bs-toggle="modal" data-bs-target="#exampleModal-@product.ProductId">
+                                    Listeye Ekle
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal-@product.ProductId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <form method="post" asp-action="AddProductToList">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">@product.ProductName</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <textarea class="form-control" name="Note" id="noteText" rows="4" cols="50"></textarea>
+                                    <input type="hidden" name="ProductId" value="@product.ProductId">
+                                    <input type="hidden" name="ListId" value="@TempData["ListId"]">
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                                    <button type="submit" class="btn btn-primary">
+                                        Listeye Ekle
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-md-3">
+        @await Html.PartialAsync("_SearchPartial")
+        @await Component.InvokeAsync("Categories",TempData["ListId"])
+    </div>
+</div>

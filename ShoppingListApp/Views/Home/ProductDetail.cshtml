@@ -1,0 +1,10 @@
+﻿@model ProductShopListVM
+<form method="post" asp-action="ProductDetail">
+    <div class="form-group mb-2">
+        <input type="hidden" name="ListId" value="@Model.ListId" />
+        <input type="hidden" name="ProductId" value="@Model.ProductId" />
+        <label class="mb-2">Ürün Notu</label>
+        <textarea class="form-control" rows="5" placeholder="Ürün için bir not giriniz." name="Note">@Model.Note</textarea>
+    </div>
+    <button class="btn btn-primary" type="submit">Kaydet</button>
+</form>
