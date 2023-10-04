@@ -1,0 +1,9 @@
+﻿@model  CreateCategoryVM
+<form method="Post" asp-controller="Admin" asp-action="CreateCategory">
+    <h5 class="text-left mb-2">Kategori Oluştur</h5>
+    <div class="form-group" style="display: flex; flex-direction: column;">
+        <input type="text" class="form-control mb-2" placeholder="Kategori Adı" asp-for="CategoryName" />
+        <span style="font-size: 80%;" class="text-danger mb-2" asp-validation-for="CategoryName"></span>
+    </div>
+    <input type="submit" class="btn btn-success" value="Oluştur" />
+</form>

@@ -167,7 +167,11 @@ namespace ShoppingListApp.Controllers
         }
         public IActionResult DeleteShopList(int listId)
         {
-            if (listId != null)
+            if (listId == null)
+            {
+                return NotFound();
+            }
+            else
             {
                 var deletedList = _shopListService.GetById(listId);
                 if (deletedList != null)
@@ -180,15 +184,6 @@ namespace ShoppingListApp.Controllers
                     };
                     TempData["Message"] = JsonSerializer.Serialize(msg);
                 }
-            }
-            else
-            {
-                var msg = new AlertMessage()
-                {
-                    AlertType = "danger",
-                    Message = "Geçersiz Liste."
-                };
-                TempData["Message"] = JsonSerializer.Serialize(msg);
             }
             return RedirectToAction("Index");
 
