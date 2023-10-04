@@ -165,7 +165,7 @@ namespace ShoppingListApp.Controllers
             }
             return View(vm);
         }
-        public IActionResult DeleteShopList(int listId)
+        public IActionResult DeleteShopList(int? listId)
         {
             if (listId == null)
             {
@@ -173,7 +173,7 @@ namespace ShoppingListApp.Controllers
             }
             else
             {
-                var deletedList = _shopListService.GetById(listId);
+                var deletedList = _shopListService.GetById((int)listId);
                 if (deletedList != null)
                 {
                     _shopListService.Delete(deletedList);
@@ -190,7 +190,6 @@ namespace ShoppingListApp.Controllers
         }
         public IActionResult UpdateShopListState(int listId)
         {
-            //_shopListService.
             _shopListService.UpdateShopListState(listId);
 
             return RedirectToAction("Index");

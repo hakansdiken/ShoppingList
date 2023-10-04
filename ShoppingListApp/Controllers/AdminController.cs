@@ -53,11 +53,11 @@ namespace ShoppingListApp.Controllers
             return RedirectToAction("AllCategories");
         }
         [HttpGet]
-        public IActionResult DeleteCategory(int categoryId)
+        public IActionResult DeleteCategory(int? categoryId)
         {
             if (categoryId != null)
             {
-                var category = _categoryService.GetById(categoryId);
+                var category = _categoryService.GetById((int)categoryId);
 
                 if (category != null)
                 {
@@ -78,14 +78,14 @@ namespace ShoppingListApp.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditCategory(int categoryId)
+        public IActionResult EditCategory(int? categoryId)
         {
             if (categoryId == null)
             {
                 return NotFound();
             }
 
-            var c = _categoryService.GetById(categoryId);
+            var c = _categoryService.GetById((int)categoryId);
 
             if (c != null)
             {
@@ -126,7 +126,7 @@ namespace ShoppingListApp.Controllers
         public IActionResult AllProducts()
         {
             var products = _productService.GetAll();
-
+            
             return View(products);
         }
 
