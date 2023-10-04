@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Abstract;
 using EntityLayer.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ShoppingListApp.Models;
 using ShoppingListApp.Models.ViewModels;
 using System.Collections.Generic;
@@ -119,6 +120,150 @@ namespace ShoppingListApp.Controllers
             };
             TempData["Message"] = JsonSerializer.Serialize(msg);
             return RedirectToAction("AllCategories");
+        }
+
+        // PRODUCT
+        public IActionResult AllProducts()
+        {
+            var products = _productService.GetAll();
+
+            return View(products);
+        }
+
+        public IActionResult CreateProduct()
+        {
+            ViewBag.Categories = new SelectList(_categoryService.GetAll(), "CategoryId", "CategoryName");
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateProductAsync(CreateProductVM vm, IFormFile file)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Categories = new SelectList(_categoryService.GetAll(), "CategoryId", "CategoryName");
+                return View(vm);
+            }
+
+            var product = new Product()
+            {
+                ProductName = vm.ProductName,
+                CategoryId = vm.CategoryId,
+            };
+
+            if (file != null)
+            {
+                var extension = Path.GetExtension(file.FileName);
+
+                var randomName = string.Format($"{Guid.NewGuid()}{extension}");
+
+                product.ProductImage = randomName;
+
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", randomName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+            }
+
+            _productService.Add(product);
+
+            var msg = new AlertMessage()
+            {
+                AlertType = "success",
+                Message = $"{product.ProductName} ürünü başarıyla oluşturuldu.",
+            };
+            TempData["Message"] = JsonSerializer.Serialize(msg);
+            return RedirectToAction("AllProducts");
+        }
+        public IActionResult DeleteProduct(int? productId)
+        {
+            if (productId == null)
+            {
+                return NotFound();
+            }
+
+            var product = _productService.GetById((int)productId);
+            if (product != null)
+            {
+                _productService.Delete(product);
+                var msg = new AlertMessage()
+                {
+                    AlertType = "success",
+                    Message = $"{product.ProductName} ürünü başarıyla silindi.",
+                };
+                TempData["Message"] = JsonSerializer.Serialize(msg);
+
+            }
+            return RedirectToAction("AllProducts");
+        }
+
+        [HttpGet]
+        public IActionResult EditProduct(int? productId)
+        {
+            if (productId == null)
+            {
+                return NotFound();
+            }
+
+            var product = _productService.GetById((int)productId);
+
+            var vm = new EditProductVM()
+            {
+                ProductId = product.ProductId,
+                CategoryId = product.CategoryId,
+                ProductName = product.ProductName,
+                ProductImage = product.ProductImage,
+            };
+
+            ViewBag.Categories = new SelectList(_categoryService.GetAll(), "CategoryId", "CategoryName");
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProduct(EditProductVM vm, IFormFile file)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Categories = new SelectList(_categoryService.GetAll(), "CategoryId", "CategoryName");
+                return View(vm);
+            }
+            var product = _productService.GetById(vm.ProductId);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            product.ProductName = vm.ProductName;
+            product.CategoryId = vm.CategoryId;
+
+            if (file != null)
+            {
+                var extension = Path.GetExtension(file.FileName);
+
+                var randomName = string.Format($"{Guid.NewGuid()}{extension}");
+
+                product.ProductImage = randomName;
+
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", randomName);
+
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+            }
+
+            _productService.Update(product);
+            var msg = new AlertMessage()
+            {
+                AlertType = "success",
+                Message = $"{product.ProductName} ürünü başarıyla düzenlendi.",
+            };
+            TempData["Message"] = JsonSerializer.Serialize(msg);
+
+            return RedirectToAction("AllProducts");
         }
     }
 }

@@ -1,0 +1,31 @@
+﻿@model List<Product>
+<h3 class="text-center">Tüm Ürünler</h3>
+<a asp-action="CreateProduct" asp-controller="Admin" class="btn btn-outline-primary mb-2">Ürün Oluştur</a>
+<table class="table table-responsive table-hover ">
+    <thead class="table-dark">
+        <tr>
+            <th>Ürün Adı</th>
+            <th>Ürün Resmi</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr style="vertical-align:middle;">
+                <td>@p.ProductName</td>
+                <td>
+                    <img src="~/images/@p.ProductImage" width="60px;" height="60px;" style="object-fit: scale-down;" />
+                </td>
+                <td width="25%">
+                    <a type="button" class="btn btn-primary btn-sm" style="width: 4.2rem" asp-controller="Admin" asp-action="EditProduct" asp-route-productId="@p.ProductId">
+                        Düzenle
+                    </a>
+                    <a type="button" class="btn btn-danger btn-sm" style="width: 4.2rem" asp-controller="Admin" asp-action="DeleteProduct" asp-route-productId="@p.ProductId">
+                        Sil
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

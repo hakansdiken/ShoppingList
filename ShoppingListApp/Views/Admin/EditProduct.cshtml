@@ -1,0 +1,33 @@
+﻿@model EditProductVM
+
+
+<form method="Post" asp-action="EditProduct" asp-controller="Admin" enctype="multipart/form-data">
+    <h5 class="text-left mb-2">Ürün Oluştur</h5>
+    <div class="text-danger" asp-validation-summary="All"></div>
+    <input type="hidden" asp-for="ProductId" />
+    <div class="form-group mb-2 col-md-6" style="display: flex; flex-direction: column;">
+        <label class="mb-2" asp-for="ProductName">Ürün Adı:</label>
+        <input type="text" class="form-control mb-2" placeholder="Ürün Adı" asp-for="ProductName" />
+        <span style="font-size: 80%;" class="text-danger mb-2" asp-validation-for="ProductName"></span>
+    </div>
+   
+    <div class="form-group mb-2 col-md-6">
+        <div>
+            <label class="mb-2" asp-for="ProductImage">Ürün Resmi:</label>
+            <input type="hidden" asp-for="ProductImage" />
+            <img src="~/images/@Model.ProductImage" width="80px;" />
+            <input type="file" name="file" />
+        </div>
+    </div>
+
+    <div class="form-group mb-2 col-md-6">
+        <label class="mb-2">Kategori:</label>
+        <select type="text" class="form-select" asp-for="CategoryId" asp-items="@ViewBag.Categories">
+            <option selected disabled>Kategori Seçiniz</option>
+        </select>
+        <span style="font-size: 80%;" class="text-danger mb-2" asp-validation-for="CategoryId"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Kaydet</button>
+
+</form>

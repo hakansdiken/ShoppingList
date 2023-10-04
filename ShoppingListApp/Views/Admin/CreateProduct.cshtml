@@ -1,0 +1,21 @@
+﻿@model CreateProductVM
+<form method="Post" asp-controller="Admin" asp-action="CreateProduct" enctype="multipart/form-data">
+    <h5 class="text-left mb-2">Ürün Oluştur</h5>
+    <div class="form-group mb-2 col-md-6" style="display: flex; flex-direction: column;">
+        <label class="mb-2" asp-for="ProductName">Ürün Adı:</label>
+        <input type="text" class="form-control mb-2" placeholder="Ürün Adı" asp-for="ProductName" />
+        <span style="font-size: 80%;" class="text-danger mb-2" asp-validation-for="ProductName"></span>
+    </div>
+    <div class="form-group mb-2 col-md-6">
+            <label class="mb-2" for="file">Ürün Resmi:</label>
+            <input type="file" class="form-control" name="file" />
+    </div>
+    <div class="form-group mb-2 col-md-6">
+        <label class="mb-2">Kategori:</label>
+        <select asp-for="CategoryId" asp-items="@ViewBag.Categories" type="text" class="form-control">
+            <option selected disabled>Kategori Seçiniz</option>
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+    <input type="submit" class="btn btn-success" value="Oluştur" />
+</form>
